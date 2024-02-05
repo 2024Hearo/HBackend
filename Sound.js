@@ -2,6 +2,8 @@ const express = require('express');
 const admin = require('firebase-admin');
 const serviceAccount = require("./hearo-17195-firebase-adminsdk-b9b6j-1b370181e9.json");
 const multer = require('multer');
+const fs = require('fs');
+
 
 const app = express();
 const port = 3000;
@@ -13,6 +15,8 @@ admin.initializeApp({
 });
 
 const bucket = admin.storage().bucket();
+
+
 
 //소리 재생하기
 app.get('/sound/play/:filename', async (req, res) => {
@@ -97,25 +101,26 @@ app.delete('/sound/delete/:filename', async (req, res) => {
 //소리 추가하기
 // Multer 설정 (메모리에 저장)
 const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+const upload = multer({ 
+  storage: storage
+ });
 
-// 파일을 추가하는 POST API 엔드포인트
-app.post('/sound/addsound', upload.single('file'), async (req, res) => {
-  try {
-    const fileBuffer = req.file.buffer;
-    const originalname = req.file.originalname;
+ // 파일 업로드하는 POST API 엔드포인트
+ app.post('/sound/addsound', async (req, res) => {
+   try {
+     const { buffer, originalname } = req.files.file; // 'file'은 클라이언트에서 보내는 파일 필드 이름
+ 
+     // Firebase Storage에 파일 업로드
+     const file = bucket.file(`sound/${originalname}`);
+     await file.save(buffer);
+ 
+     res.status(200).json({ message: 'File uploaded successfully' });
+   } catch (error) {
+     console.error(error);
+     res.status(500).json({ error: 'Error uploading file' });
+   }
+ }); 
 
-    // Firebase Storage에 파일 업로드
-    const bucket = admin.storage().bucket();
-    const file = bucket.file(`sound/${originalname}`);
-    await file.save(fileBuffer);
-
-    res.status(200).json({ message: 'File uploaded successfully' });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error });
-  }
-});
 
 app.listen(port, () => {
   console.log(`server connected`);
