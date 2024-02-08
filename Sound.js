@@ -106,20 +106,26 @@ const upload = multer({
  });
 
  // 파일 업로드하는 POST API 엔드포인트
- app.post('/sound/addsound', async (req, res) => {
-   try {
-     const { buffer, originalname } = req.files.file; // 'file'은 클라이언트에서 보내는 파일 필드 이름
- 
-     // Firebase Storage에 파일 업로드
-     const file = bucket.file(`sound/${originalname}`);
-     await file.save(buffer);
- 
-     res.status(200).json({ message: 'File uploaded successfully' });
-   } catch (error) {
-     console.error(error);
-     res.status(500).json({ error: 'Error uploading file' });
-   }
- }); 
+app.post('/sound/addsound', upload.single('file'), async (req, res) => {
+  try {
+    if (!req.file) {
+      // 클라이언트가 파일을 제대로 업로드하지 않은 경우
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+
+    const { buffer, originalname } = req.file;
+    
+    // Firebase Storage에 파일 업로드
+    const file = bucket.file(`sound/${originalname}`);
+    await file.save(buffer);
+    
+    res.status(200).json({ message: 'File uploaded successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error uploading file' });
+  }
+});
+
 
 
 app.listen(port, () => {
