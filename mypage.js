@@ -24,7 +24,6 @@ app.get('/mypage', async (req, res) => {
       const userRecord = await admin.auth().getUser(userId);
   
       // 사용자의 이름을 가져와서 클라이언트에 반환
-      const userName = userRecord.displayName;
       const formattedUserName = `${userName} 님`;
   
       return res.json({ userId, userName: formattedUserName });
