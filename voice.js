@@ -46,18 +46,21 @@ const upload = multer({ storage: storage });
 // 파일을 추가하는 POST API 엔드포인트
 app.post('/voice/addvoice', upload.single('file'), async (req, res) => {
   try {
-    const fileBuffer = req.file.buffer;
-    const originalname = req.file.originalname;
+    if (!req.file) {
+      // 클라이언트가 파일을 제대로 업로드하지 않은 경우
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
 
+    const { buffer, originalname } = req.file;
+    
     // Firebase Storage에 파일 업로드
-    const bucket = admin.storage().bucket();
-    const file = bucket.file(`myvoice/${originalname}`);
-    await file.save(fileBuffer);
-
+    const file = bucket.file(`voice/${originalname}`);
+    await file.save(buffer);
+    
     res.status(200).json({ message: 'File uploaded successfully' });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error });
+    res.status(500).json({ error: 'Error uploading file' });
   }
 });
 
