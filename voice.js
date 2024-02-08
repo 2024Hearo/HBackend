@@ -20,7 +20,7 @@ app.delete('/voice/deletevoice/:filename', async (req, res) => {
       const filename = req.params.filename;
   
       // Firebase Storage에서 파일 삭제
-      const file = bucket.file(`myvoice/${filename}`);
+      const file = bucket.file(`voice/${filename}`);
       const [exists] = await file.exists();
   
       // 파일이 존재하지 않으면 에러 반환
