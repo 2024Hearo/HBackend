@@ -74,29 +74,30 @@ app.get('/sound/soundlist', async (req, res) => {
   }
 });
 
-//소리 삭제하기
-app.delete('/sound/delete/:filename', async (req, res) => {
-    try {
-      const filename = req.params.filename;
-  
-      // Firebase Storage에서 파일 삭제
-      const file = bucket.file(`sound/${filename}`);
-      const [exists] = await file.exists();
-  
-      // 파일이 존재하지 않으면 에러 반환
-      if (!exists) {
-        return res.status(404).json({ error: 'File not found' });
-      }
-  
-      // 파일 삭제
-      await file.delete();
-  
-      res.status(200).json({ message: 'File deleted successfully' });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error });
+// 파일 삭제하기
+app.delete('/sound/delete', async (req, res) => {
+  try {
+    const filename = req.body.filename; // 클라이언트에서 전송한 파일의 식별자
+
+    // Firebase Storage에서 파일 삭제
+    const file = bucket.file(`sound/${filename}`);
+    const [exists] = await file.exists();
+
+    // 파일이 존재하지 않으면 에러 반환
+    if (!exists) {
+      return res.status(404).json({ error: 'File not found' });
     }
+
+    // 파일 삭제
+    await file.delete();
+
+    res.status(200).json({ message: 'File deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error });
+  }
 });
+
 
 //소리 추가하기
 // Multer 설정 (메모리에 저장)
