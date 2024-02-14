@@ -1,5 +1,5 @@
 # HBackend
-2024 Google Solution Challenge, Hearo-Server
+2023-2024 Google Solution Challenge, Hearo-Server
 
 Branch
 - sound : basic alarm
