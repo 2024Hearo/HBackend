@@ -53,6 +53,42 @@ app.get('/sound/play/:filename', async (req, res) => {
   }
 });
 
+//소리 각자 재생하는거
+app.get('/sound/play/problem.mp3', async (req, res) => {
+  const filename = 'problem.mp3';
+
+  // Firebase Storage에서 파일을 읽어오기
+  const file = bucket.file(`sound/${filename}`);
+
+  try {
+    console.log(`Attempting to read file: sound/${filename}`);
+
+    const [fileExists] = await file.exists();
+
+    if (!fileExists) {
+      console.log(`File not found: sound/${filename}`);
+      return res.status(404).json({ error: 'MP3 file not found' });
+    }
+
+    // Set the content type to audio/mpeg
+    res.setHeader('Content-Type', 'audio/mpeg');
+
+    // Create a readable stream from the file and pipe it to the response
+    const stream = file.createReadStream();
+    stream.pipe(res);
+
+    // Handle errors
+    stream.on('error', (error) => {
+      console.error(`Error streaming file: sound/${filename}`, error);
+      res.status(500).json({ error});
+    });
+  } catch (error) {
+    console.error(`Error checking file existence: sound/${filename}`, error);
+    res.status(500).json({ error });
+  }
+});
+
+
 //소리 목록 가져오기
 app.get('/sound/soundlist', async (req, res) => {
   try {
