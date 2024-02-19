@@ -1,3 +1,8 @@
-node_modules
-google-services (1).json
-hearo-17195-firebase-adminsdk-b9b6j-15b39067a1.json
+# Ignore Node.js build artifacts
+node_modules/
+
+# Ignore Firebase service account JSON files
+hearo-17195-firebase-adminsdk-b9b6j-*.json
+
+# Ignore any files related to Google services
+google-services*.json
