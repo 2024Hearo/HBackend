@@ -6,3 +6,6 @@ hearo-17195-firebase-adminsdk-b9b6j-*.json
 
 # Ignore any files related to Google services
 google-services*.json
+
+# Ignore .gitignore file itself
+.gitignore
