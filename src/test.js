@@ -307,19 +307,21 @@ app.get('/check-invite-status', async (req, res) => {
       const chatRooms = snapshot.val();
 
       if (chatRooms) {
-        const rooms = await Promise.all(Object.values(chatRooms).map(async room => {
+        const rooms = await Promise.all(Object.entries(chatRooms).map(async ([roomId, room]) => {
           const participantsSnapshot = await admin.database().ref(`/ChatRooms/${room.ChatRoomID}/participants`).once('value');
           const participants = participantsSnapshot.val();
 
-          const inviterSnapshot = await admin.database().ref(`/Users/${room.inviter.uid}`).once('value');
-          const inviterData = inviterSnapshot.val();
+          let inviterData = {};
+          if (room.inviter && room.inviter.uid) {
+            const inviterSnapshot = await admin.database().ref(`/Users/${room.inviter.uid}`).once('value');
+            inviterData = inviterSnapshot.val();
+          }
 
           return {
-            roomId: room.ChatRoomID,
+            roomId: roomId, // Use the roomId from the loop
             accepted: room.accepted || false,
-            invite: room.invite || null,
             inviter: {
-              uid: room.inviter.uid,
+              uid: room.inviter ? room.inviter.uid : '', // inviter가 정의되어 있는지 확인
               name: inviterData.displayName || '', 
             },
           };
