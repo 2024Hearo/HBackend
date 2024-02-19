@@ -1,0 +1,21 @@
+{
+    "Users": [
+      {
+        "Name": "Hearo",
+        "ChatRooms": [
+          {
+            "ChatRoomID": "00000001",
+            "roomname": "ForDinner",
+            "message": ""
+          },
+          {
+            "ChatRoomID": "00000002",
+            "roomname": "ForMovies",
+            "message": ""
+          }
+
+        ]
+      }
+    ]
+  }
+  
