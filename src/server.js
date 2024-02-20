@@ -1,6 +1,6 @@
 const express = require('express');
 const admin = require('firebase-admin');
-const serviceAccount = "hearo-414907-firebase-adminsdk-h4m2h-10e7324219.json"
+const serviceAccount = "hearos-414916-firebase-adminsdk-bfrdw-763fae27a9.json"
 const multer = require('multer');
 const fs = require('fs');
 const cors = require('cors');
@@ -11,8 +11,8 @@ const port = 8080;
 // Firebase 초기화
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  storageBucket: 'gs://hearo-414907.appspot.com', // Firebase Storage 버킷 URL
-  databaseURL: 'https://hearo-414907-default-rtdb.firebaseio.com'
+  storageBucket: 'hearos-414916.appspot.com', 
+  databaseURL: 'https://hearos-414916-default-rtdb.firebaseio.com'
 });
 
 const firebaseConfig = {
@@ -22,8 +22,7 @@ const firebaseConfig = {
   projectId: process.env.FIREBASE_PROJECT_ID,
   storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.FIREBASE_APP_ID,
-  measurementId: process.env.FIREBASE_MEASUREMENT_ID
+  appId: process.env.FIREBASE_APP_ID
 };
 
 const bucket = admin.storage().bucket();

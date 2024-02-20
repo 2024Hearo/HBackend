@@ -10,7 +10,8 @@
     "nodemailer": "^6.9.9"
   },
   "scripts": {
-    "start": "node app.js"
-  }
+    "start": "node src/server.js"
+  },
+  "main" : "server.js"
 }
 
