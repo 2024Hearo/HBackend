@@ -340,7 +340,7 @@ app.post('/accept-invite', async (req, res) => {
       [inviterUid]: true,
     });
 
-    await chatRoomRef.update({
+    await userChatRoomRef.update({
       accepted: true,
     });
 
