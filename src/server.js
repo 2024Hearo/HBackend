@@ -1,6 +1,6 @@
 const express = require('express');
 const admin = require('firebase-admin');
-const serviceAccount = GOOGLE_APPLICATION_CREDENTIALS
+const serviceAccount = "hearo-414907-firebase-adminsdk-h4m2h-10e7324219.json"
 const multer = require('multer');
 const fs = require('fs');
 const cors = require('cors');
