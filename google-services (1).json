@@ -1,53 +1,27 @@
 {
   "project_info": {
-    "project_number": "976399412290",
-    "firebase_url": "https://hearo-17195-default-rtdb.firebaseio.com",
-    "project_id": "hearo-17195",
-    "storage_bucket": "hearo-17195.appspot.com"
+    "project_number": "26288987128",
+    "firebase_url": "https://hearo-414907-default-rtdb.firebaseio.com",
+    "project_id": "hearo-414907",
+    "storage_bucket": "hearo-414907.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:976399412290:android:6ebe6fac7cee2c3a9c91db",
+        "mobilesdk_app_id": "1:26288987128:android:dddd6ede58f5c15f0b140d",
         "android_client_info": {
           "package_name": "com.hearos.hearo"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "976399412290-9q03pd49a8iq2cu1en2s0vd0g9en5pfd.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.hearos.hearo",
-            "certificate_hash": "334d23fc9fdf10b407abe02e47f6b2f3796406c9"
-          }
-        },
-        {
-          "client_id": "976399412290-mf2m4ns8qkakgm59f4l54ff125hghlfg.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.hearos.hearo",
-            "certificate_hash": "77e53e19f4190f204f24dbee1ecf14f369185460"
-          }
-        },
-        {
-          "client_id": "976399412290-fl9ampj64u4vno3gvim8dnvvuju5cn7o.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDTZJ6Os1utQUuUzZ3FQsvDK_yQMAvkCYw"
+          "current_key": "AIzaSyAzAfgPejEjGP5Hk8Uv-Vkn8mqv9GryfEE"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "976399412290-fl9ampj64u4vno3gvim8dnvvuju5cn7o.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

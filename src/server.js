@@ -1,6 +1,6 @@
 const express = require('express');
 const admin = require('firebase-admin');
-const serviceAccount = require("./hearo-17195-firebase-adminsdk-b9b6j-1b370181e9.json");
+const serviceAccount = GOOGLE_APPLICATION_CREDENTIALS
 const multer = require('multer');
 const fs = require('fs');
 const cors = require('cors');
@@ -11,8 +11,8 @@ const port = 8080;
 // Firebase 초기화
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  storageBucket: 'gs://hearo-2024', // Firebase Storage 버킷 URL
-  databaseURL: 'https://hearo-17195-default-rtdb.firebaseio.com'
+  storageBucket: 'gs://hearo-414907.appspot.com', // Firebase Storage 버킷 URL
+  databaseURL: 'https://hearo-414907-default-rtdb.firebaseio.com'
 });
 
 const firebaseConfig = {
@@ -108,7 +108,6 @@ app.delete('/sound/delete', async (req, res) => {
   try {
     const filename = req.body.filename; 
 
-    // Firebase Storage에서 파일 삭제
     const file = bucket.file(`sound/${filename}`);
     const [exists] = await file.exists();
 
