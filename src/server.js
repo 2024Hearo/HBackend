@@ -6,7 +6,7 @@ const fs = require('fs');
 const cors = require('cors');
 
 const app = express();
-const port = 3000;
+const port = 8080;
 
 // Firebase 초기화
 admin.initializeApp({
@@ -37,17 +37,14 @@ app.use(cors());
 // 마이페이지 API 엔드포인트
 app.get('/mypage', async (req, res) => {
   try {
-    // 클라이언트에서 요청된 사용자의 ID 가져오기 (예: 클라이언트에서 헤더에 인증된 사용자의 ID를 전송)
     const userId = req.headers.authorization;
 
     if (!userId) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    // Firebase에서 사용자 정보 가져오기
     const userRecord = await admin.auth().getUser(userId);
 
-    // 사용자의 이름을 가져와서 클라이언트에 반환
     const userName = userRecord.displayName;
     const formattedUserName = `${userName} 님`;
 
@@ -59,11 +56,9 @@ app.get('/mypage', async (req, res) => {
 });
 
 
-//소리 재생하기
 app.get('/sound/play/:filename', async (req, res) => {
   const filename = req.params.filename;
 
-  // Firebase Storage에서 파일을 읽어오기
   const file = bucket.file(`sound/${filename}`);
 
   try {
@@ -76,10 +71,8 @@ app.get('/sound/play/:filename', async (req, res) => {
       return res.status(404).json({ error: 'MP3 file not found' });
     }
 
-    // Set the content type to audio/mpeg
     res.setHeader('Content-Type', 'audio/mpeg');
 
-    // Create a readable stream from the file and pipe it to the response
     const stream = file.createReadStream();
     stream.pipe(res);
 
@@ -94,18 +87,14 @@ app.get('/sound/play/:filename', async (req, res) => {
   }
 });
 
-//소리 목록 가져오기
 app.get('/sound/soundlist', async (req, res) => {
   try {
-    // Firebase Storage에서 파일 목록을 읽어오기
     const [files] = await bucket.getFiles({ prefix: 'sound/' });
 
-    // 파일 목록이 없을 경우 에러 처리
     if (files.length === 0) {
       return res.status(404).json({ error: 'No file exists' });
     }
 
-    // 파일 목록을 반환
     const fileList = files.map(file => file.name);
 
     res.status(200).json({ soundList: fileList });
@@ -115,21 +104,19 @@ app.get('/sound/soundlist', async (req, res) => {
   }
 });
 
-// 파일 삭제하기
 app.delete('/sound/delete', async (req, res) => {
   try {
-    const filename = req.body.filename; // 클라이언트에서 전송한 파일의 식별자
+    const filename = req.body.filename; 
 
     // Firebase Storage에서 파일 삭제
     const file = bucket.file(`sound/${filename}`);
     const [exists] = await file.exists();
 
-    // 파일이 존재하지 않으면 에러 반환
+    // Handle Errors
     if (!exists) {
       return res.status(404).json({ error: 'File not found' });
     }
 
-    // 파일 삭제
     await file.delete();
 
     res.status(200).json({ message: 'File deleted successfully' });
@@ -140,24 +127,23 @@ app.delete('/sound/delete', async (req, res) => {
 });
 
 
-//소리 추가하기
-// Multer 설정 (메모리에 저장)
+
 const storage = multer.memoryStorage();
 const upload = multer({ 
   storage: storage
  });
 
- // 파일 업로드하는 POST API 엔드포인트
+
 app.post('/sound/addsound', upload.single('file'), async (req, res) => {
   try {
     if (!req.file) {
-      // 클라이언트가 파일을 제대로 업로드하지 않은 경우
+
       return res.status(400).json({ error: 'No file uploaded' });
     }
 
     const { buffer, originalname } = req.file;
     
-    // Firebase Storage에 파일 업로드
+
     const file = bucket.file(`sound/${originalname}`);
     await file.save(buffer);
     
@@ -168,11 +154,11 @@ app.post('/sound/addsound', upload.single('file'), async (req, res) => {
   }
 });
 
-//영상 재생하기
+
 app.get('/vedio/play/:filename', async (req, res) => {
   const filename = req.params.filename;
 
-  // Firebase Storage에서 파일을 읽어오기
+
   const file = bucket.file(`vedio/${filename}`);
 
   try {
@@ -185,10 +171,8 @@ app.get('/vedio/play/:filename', async (req, res) => {
       return res.status(404).json({ error: 'MP4 file not found' });
     }
 
-    // Set the content type to audio/mpeg
     res.setHeader('Content-Type', 'video/mp4');
 
-    // Create a readable stream from the file and pipe it to the response
     const stream = file.createReadStream();
     stream.pipe(res);
 
@@ -203,21 +187,17 @@ app.get('/vedio/play/:filename', async (req, res) => {
   }
 });
 
-//마이보이스 삭제하기
 app.delete('/voice/deletevoice/:filename', async (req, res) => {
   try {
     const filename = req.params.filename;
 
-    // Firebase Storage에서 파일 삭제
     const file = bucket.file(`voice/${filename}`);
     const [exists] = await file.exists();
 
-    // 파일이 존재하지 않으면 에러 반환
     if (!exists) {
       return res.status(404).json({ error: 'File not found' });
     }
 
-    // 파일 삭제
     await file.delete();
 
     res.status(200).json({ message: 'File deleted successfully' });
@@ -227,17 +207,14 @@ app.delete('/voice/deletevoice/:filename', async (req, res) => {
   }
 });
 
-// 파일을 추가하는 POST API 엔드포인트
 app.post('/voice/addvoice', upload.single('file'), async (req, res) => {
 try {
   if (!req.file) {
-    // 클라이언트가 파일을 제대로 업로드하지 않은 경우
     return res.status(400).json({ error: 'No file uploaded' });
   }
 
   const { buffer, originalname } = req.file;
   
-  // Firebase Storage에 파일 업로드
   const file = bucket.file(`voice/${originalname}`);
   await file.save(buffer);
   
@@ -248,7 +225,6 @@ try {
 }
 });
 
-//채팅
 app.post('/invite', async (req, res) => {
   try {
     const { chatRoomName, email, token } = req.body;
@@ -319,10 +295,10 @@ app.get('/check-invite-status', async (req, res) => {
           }
 
           return {
-            roomId: roomId, // Use the roomId from the loop
+            roomId: roomId, 
             accepted: room.accepted || false,
             inviter: {
-              uid: room.inviter ? room.inviter.uid : '', // inviter가 정의되어 있는지 확인
+              uid: room.inviter ? room.inviter.uid : '', 
               name: inviterData.displayName || '', 
             },
           };
@@ -345,7 +321,6 @@ app.post('/accept-invite', async (req, res) => {
   try {
     const { userId, roomId } = req.body;
 
-    // 사용자가 속한 채팅방에서 'accepted' 값을 true로 업데이트
     const userChatRoomRef = admin.database().ref(`/Users/${userId}/ChatRooms/${roomId}`);
     const userChatRoomSnapshot = await userChatRoomRef.once('value');
     const userChatRoomData = userChatRoomSnapshot.val();
@@ -359,10 +334,8 @@ app.post('/accept-invite', async (req, res) => {
     // Get inviter's UID from the user's ChatRoom data
     const inviterUid = userChatRoomData.inviter.uid;
 
-    // 채팅방의 'participants'에 상대와 나의 userId 추가
     const chatRoomRef = admin.database().ref(`/chatRooms/${roomId}`);
     
-    // Create a new entry for the room if it doesn't exist
     const participantsRef = chatRoomRef.child('participants');
 
     await participantsRef.update({
@@ -397,7 +370,7 @@ function generateRandomRoomId() {
   let roomId = '';
 
   for (let i = 0; i < length; i++) {
-    const digit = Math.floor(Math.random() * 10); // 0부터 9까지의 랜덤한 숫자
+    const digit = Math.floor(Math.random() * 10); 
     roomId += digit.toString();
   }
 
