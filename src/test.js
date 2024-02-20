@@ -15,18 +15,19 @@ admin.initializeApp({
   databaseURL: 'https://hearo-17195-default-rtdb.firebaseio.com'
 });
 
+const firebaseConfig = {
+  apiKey: process.env.FIREBASE_API_KEY,
+  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+  databaseURL: process.env.FIREBASE_DATABASE_URL,
+  projectId: process.env.FIREBASE_PROJECT_ID,
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.FIREBASE_APP_ID,
+  measurementId: process.env.FIREBASE_MEASUREMENT_ID
+};
+
 const bucket = admin.storage().bucket();
 const firebase = require("@firebase/app");
-const firebaseConfig = {
-    apiKey: "AIzaSyCoFo4_3pM9ooJCKuI3LSUbIOvUTGPWzuA",
-    authDomain: "hearo-17195.firebaseapp.com",
-    databaseURL: "https://hearo-17195-default-rtdb.firebaseio.com",
-    projectId: "hearo-17195",
-    storageBucket: "hearo-17195.appspot.com",
-    messagingSenderId: "976399412290",
-    appId: "1:976399412290:web:d567798b3c55d64f9c91db",
-    measurementId: "G-VNX2N0CQBG"
-  };
 
   firebase.initializeApp(firebaseConfig);
 app.use(express.json());
