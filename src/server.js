@@ -329,7 +329,6 @@ app.post('/accept-invite', async (req, res) => {
       return;
     }
 
-    // Get inviter's UID from the user's ChatRoom data
     const inviterUid = userChatRoomData.inviter.uid;
 
     const chatRoomRef = admin.database().ref(`/chatRooms/${roomId}`);
@@ -341,7 +340,11 @@ app.post('/accept-invite', async (req, res) => {
       [inviterUid]: true,
     });
 
-    res.json({ success: true });
+    await chatRoomRef.update({
+      accepted: true,
+    });
+
+    res.json({ success: true, accepted: true });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, error: 'Internal Server Error' });
