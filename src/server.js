@@ -2,11 +2,14 @@ const express = require('express');
 const admin = require('firebase-admin');
 const serviceAccount = "hearos-414916-firebase-adminsdk-bfrdw-763fae27a9.json"
 const multer = require('multer');
+const { spawn } = require('child_process');
 const fs = require('fs');
 const cors = require('cors');
+const bodyParser = require('body-parser');
 
 const app = express();
 const port = 8080;
+app.use(bodyParser.json());
 
 // Firebase 초기화
 admin.initializeApp({
@@ -221,6 +224,25 @@ try {
   console.error(error);
   res.status(500).json({ error: 'Error uploading file' });
 }
+});
+
+app.post('/run/voice', (req, res) => {
+  console.log('Received request on /run/voice');
+
+  const pythonProcess = spawn('python', ['./Voice.py']);
+
+  pythonProcess.stdout.on('data', (data) => {
+      console.log(`stdout: ${data}`);
+  });
+
+  pythonProcess.stderr.on('data', (data) => {
+      console.error(`stderr: ${data}`);
+  });
+
+  pythonProcess.on('close', (code) => {
+      console.log(`child process exited with code ${code}`);
+      res.send({ message: 'Voice.py script executed successfully', code });
+  });
 });
 
 app.post('/invite', async (req, res) => {
